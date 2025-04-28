@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3 {
+      color: #333;
+    }
+
+    .demo-container {
+      margin: 20px 0;
+      border: 2px solid #333;
+      padding: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .flex-container {
+      display: flex;
+      min-height: 150px;
+      border: 2px solid #0066cc;
+      margin-bottom: 20px;
+      background-color: #e6f0ff;
+      position: relative;
+    }
+
+    .flex-container::before {
+      content: attr(data-title);
+      position: absolute;
+      top: -25px;
+      left: 0;
+      background-color: #0066cc;
+      color: white;
+      padding: 2px 8px;
+      font-weight: bold;
+    }
+
+    .flex-item {
+      padding: 20px;
+      margin: 5px;
+      background-color: #ff9900;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      border: 1px solid #cc7a00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .align-self-demo .flex-item:nth-child(2) {
+      align-self: flex-start;
+    }
+
+    .align-self-demo .flex-item:nth-child(3) {
+      align-self: center;
+    }
+
+    .align-self-demo .flex-item:nth-child(4) {
+      align-self: flex-end;
+    }
+
+    .align-self-demo .flex-item:nth-child(5) {
+      align-self: stretch;
+    }
+
+    .justify-content-demo {
+      justify-content: space-between;
+    }
+
+    .align-items-demo {
+      align-items: center;
+    }
+
+    .direction-demo {
+      flex-direction: column;
+    }
+
+    .wrap-demo {
+      flex-wrap: wrap;
+      height: 200px;
+    }
+
+    .order-demo .flex-item:nth-child(1) {
+      order: 3;
+    }
+
+    .order-demo .flex-item:nth-child(2) {
+      order: 1;
+    }
+
+    .order-demo .flex-item:nth-child(3) {
+      order: 2;
+    }
+
+    .grow-demo .flex-item:nth-child(2) {
+      flex-grow: 1;
+    }
+
+    .grow-demo .flex-item:nth-child(3) {
+      flex-grow: 2;
+    }
+
+    .control-panel {
+      margin: 30px 0;
+      padding: 15px;
+      background-color: #f0f0f0;
+      border-radius: 5px;
+    }
+
+    .control-group {
+      margin-bottom: 15px;
+    }
+
+    .control-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 5px 10px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #004c99;
+    }
+
+    .btn.active {
+      background-color: #ff9900;
+    }
+
+    #playground {
+      min-height: 200px;
+    }
+
+    #code-display {
+      background-color: #333;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      margin-top: 10px;
+    }
+
+    .axis {
+      position: absolute;
+      background-color: rgba(255,0,0,0.5);
+      z-index: 10;
+    }
+
+    .main-axis {
+      height: 4px;
+      left: 0;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .cross-axis {
+      width: 4px;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .column .main-axis {
+      width: 4px;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      right: auto;
+      transform: translateX(-50%);
+      height: auto;
+    }
+
+    .column .cross-axis {
+      height: 4px;
+      left: 0;
+      right: 0;
+      top: 50%;
+      bottom: auto;
+      transform: translateY(-50%);
+      width: auto;
+    }
+
+    .axis-label {
+      position: absolute;
+      background-color: rgba(255,0,0,0.8);
+      color: white;
+      padding: 2px 5px;
+      font-size: 12px;
+      border-radius: 3px;
+    }
+
+    .main-axis-label {
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .cross-axis-label {
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .column .main-axis-label {
+      bottom: 10px;
+      left: 50%;
+      top: auto;
+      right: auto;
+      transform: translateX(-50%);
+    }
+
+    .column .cross-axis-label {
+      right: 10px;
+      top: 50%;
+      left: auto;
+      transform: translateY(-50%);
+    }
+
+    .note {
+      background-color: #ffffcc;
+      padding: 10px;
+      border-left: 4px solid #ffcc00;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Flexbox Visual Guide</h1>
+  
+  <div class="note">
+    <strong>Understanding the axes:</strong> In flexbox, there are two axes - the <strong>main axis</strong> (red horizontal line) and <strong>cross axis</strong> (red vertical line). The direction of these axes changes based on flex-direction.
+  </div>
+  
+  <h2>Basic Flexbox Container</h2>
+  <div class="demo-container">
+    <div class="flex-container" data-title="display: flex">
+      <div class="axis main-axis"></div>
+      <div class="axis cross-axis"></div>
+      <div class="axis-label main-axis-label">Main Axis</div>
+      <div class="axis-label cross-axis-label">Cross Axis</div>
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+      <div class="flex-item">4</div>
+    </div>
+    <p>By default, flex items are laid out in a row (left to right) and only take up as much space as they need.</p>
+  </div>
+
+  <h2>justify-content (Main Axis Alignment)</h2>
+  <div class="demo-container">
+    <div class="flex-container justify-content-demo" data-title="justify-content: space-between">
+      <div class="axis main-axis"></div>
+      <div class="axis cross-axis"></div>
+      <div class="axis-label main-axis-label">Main Axis</div>
+      <div class="axis-label cross-axis-label">Cross Axis</div>
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+    <p><code>justify-content</code> controls alignment along the main axis. Options include: flex-start, flex-end, center, space-between, space-around, and space-evenly.</p>
+  </div>
+
+  <h2>align-items (Cross Axis Alignment)</h2>
+  <div class="demo-container">
+    <div class="flex-container align-items-demo" data-title="align-items: center">
+      <div class="axis main-axis"></div>
+      <div class="axis cross-axis"></div>
+      <div class="axis-label main-axis-label">Main Axis</div>
+      <div class="axis-label cross-axis-label">Cross Axis</div>
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item" style="height: 80px;">3 (taller)</div>
+      <div class="flex-item">4</div>
+    </div>
+    <p><code>align-items</code> controls alignment along the cross axis. Options include: flex-start, flex-end, center, baseline, and stretch.</p>
+  </div>
+
+  <h2>align-self (Individual Cross Axis Alignment)</h2>
+  <div class="demo-container">
+    <div class="flex-container align-self-demo" data-title="align-self (various)">
+      <div class="axis main-axis"></div>
+      <div class="axis cross-axis"></div>
+      <div class="axis-label main-axis-label">Main Axis</div>
+      <div class="axis-label cross-axis-label">Cross Axis</div>
+      <div class="flex-item">1 (default)</div>
+      <div class="flex-item">2 (flex-start)</div>
+      <div class="flex-item">3 (center)</div>
+      <div class="flex-item">4 (flex-end)</div>
+      <div class="flex-item">5 (stretch)</div>
+    </div>
+    <p><code>align-self</code> allows individual items to have different cross-axis alignment, overriding the container's <code>align-items</code> value.</p>
+  </div>
+
+  <h2>flex-direction (Changing the Axis Direction)</h2>
+  <div class="demo-container">
+    <div class="flex-container direction-demo column" data-title="flex-direction: column">
+      <div class="axis main-axis"></div>
+      <div class="axis cross-axis"></div>
+      <div class="axis-label main-axis-label">Main Axis</div>
+      <div class="axis-label cross-axis-label">Cross Axis</div>
+      <div class="flex-item">1</div>
+      <div class="flex-item">2</div>
+      <div class="flex-item">3</div>
+    </div>
+    <p><code>flex-direction</code> changes the direction of the main axis. Options include: row (default), row-reverse, column, column-reverse.</p>
+  </div>
+
+  <h2>flex-wrap (Wrapping Items)</h2>
+  <div class="demo-container">
+    <div class="flex-container wrap-demo" data-title="flex-wrap: wrap">
+      <div class="axis main-axis"></div>
+      <div class="axis cross-axis"></div>
+      <div class="axis-label main-axis-label">Main Axis</div>
+      <div class="axis-label cross-axis-label">Cross Axis</div>
+      <div class="flex-item" style="width: 30%;">1 (30%)</div>
+      <div class="flex-item" style="width: 40%;">2 (40%)</div>
+      <div class="flex-item" style="width: 35%;">3 (35%)</div>
+      <div class="flex-item" style="width: 40%;">4 (40%)</div>
+      <div class="flex-item" style="width: 45%;">5 (45%)</div>
+    </div>
+    <p><code>flex-wrap</code> controls whether items wrap to new lines when they run out of space. Options include: nowrap (default), wrap, wrap-reverse.</p>
+  </div>
+
+  <h2>order (Changing Item Order)</h2>
+  <div class="demo-container">
+    <div class="flex-container order-demo" data-title="order property">
+      <div class="axis main-axis"></div>
+      <div class="axis cross-axis"></div>
+      <div class="axis-label main-axis-label">Main Axis</div>
+      <div class="axis-label cross-axis-label">Cross Axis</div>
+      <div class="flex-item">1 (order: 3)</div>
+      <div class="flex-item">2 (order: 1)</div>
+      <div class="flex-item">3 (order: 2)</div>
+    </div>
+    <p>The <code>order</code> property controls the order in which items appear, regardless of their order in the HTML.</p>
+  </div>
+
+  <h2>flex-grow (Growing to Fill Space)</h2>
+  <div class="demo-container">
+    <div class="flex-container grow-demo" data-title="flex-grow">
+      <div class="axis main-axis"></div>
+      <div class="axis cross-axis"></div>
+      <div class="axis-label main-axis-label">Main Axis</div>
+      <div class="axis-label cross-axis-label">Cross Axis</div>
+      <div class="flex-item">1 (no grow)</div>
+      <div class="flex-item">2 (grow: 1)</div>
+      <div class="flex-item">3 (grow: 2)</div>
+    </div>
+    <p><code>flex-grow</code> determines how much an item can grow relative to other items. A higher value means it will take more of the available space.</p>
+  </div>
+
+  <h2>Interactive Playground</h2>
+  <div class="control-panel">
+    <div class="control-group">
+      <label>justify-content:</label>
+      <div class="controls" id="justify-controls">
+        <button class="btn active" data-value="flex-start">flex-start</button>
+        <button class="btn" data-value="flex-end">flex-end</button>
+        <button class="btn" data-value="center">center</button>
+        <button class="btn" data-value="space-between">space-between</button>
+        <button class="btn" data-value="space-around">space-around</button>
+        <button class="btn" data-value="space-evenly">space-evenly</button>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <label>align-items:</label>
+      <div class="controls" id="align-controls">
+        <button class="btn active" data-value="stretch">stretch</button>
+        <button class="btn" data-value="flex-start">flex-start</button>
+        <button class="btn" data-value="flex-end">flex-end</button>
+        <button class="btn" data-value="center">center</button>
+        <button class="btn" data-value="baseline">baseline</button>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <label>flex-direction:</label>
+      <div class="controls" id="direction-controls">
+        <button class="btn active" data-value="row">row</button>
+        <button class="btn" data-value="row-reverse">row-reverse</button>
+        <button class="btn" data-value="column">column</button>
+        <button class="btn" data-value="column-reverse">column-reverse</button>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <label>flex-wrap:</label>
+      <div class="controls" id="wrap-controls">
+        <button class="btn active" data-value="nowrap">nowrap</button>
+        <button class="btn" data-value="wrap">wrap</button>
+        <button class="btn" data-value="wrap-reverse">wrap-reverse</button>
+      </div>
+    </div>
+    
+    <div id="code-display">
+      .container {
+        display: flex;
+        justify-content: flex-start;
+        align-items: stretch;
+        flex-direction: row;
+        flex-wrap: nowrap;
+      }
+    </div>
+  </div>
+  
+  <div class="flex-container" id="playground" data-title="Interactive Demo">
+    <div class="axis main-axis"></div>
+    <div class="axis cross-axis"></div>
+    <div class="axis-label main-axis-label">Main Axis</div>
+    <div class="axis-label cross-axis-label">Cross Axis</div>
+    <div class="flex-item">1</div>
+    <div class="flex-item">2</div>
+    <div class="flex-item">3</div>
+    <div class="flex-item">4</div>
+  </div>
+
+  <script>
+    // Get elements
+    const playground = document.getElementById('playground');
+    const codeDisplay = document.getElementById('code-display');
+    
+    // Current settings
+    let currentSettings = {
+      justifyContent: 'flex-start',
+      alignItems: 'stretch',
+      flexDirection: 'row',
+      flexWrap: 'nowrap'
+    };
+    
+    // Function to update the playground and code display
+    function updatePlayground() {
+      playground.style.justifyContent = currentSettings.justifyContent;
+      playground.style.alignItems = currentSettings.alignItems;
+      playground.style.flexDirection = currentSettings.flexDirection;
+      playground.style.flexWrap = currentSettings.flexWrap;
+      
+      // Update code display
+      codeDisplay.textContent = `.container {
+  display: flex;
+  justify-content: ${currentSettings.justifyContent};
+  align-items: ${currentSettings.alignItems};
+  flex-direction: ${currentSettings.flexDirection};
+  flex-wrap: ${currentSettings.flexWrap};
+}`;
+      
+      // Update axes for column directions
+      if (currentSettings.flexDirection.includes('column')) {
+        playground.classList.add('column');
+      } else {
+        playground.classList.remove('column');
+      }
+    }
+    
+    // Setup button click handlers
+    function setupButtonGroup(selector, property) {
+      const buttons = document.querySelectorAll(`#${selector} .btn`);
+      buttons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons in group
+          buttons.forEach(b => b.classList.remove('active'));
+          
+          // Add active class to clicked button
+          button.classList.add('active');
+          
+          // Update settings
+          currentSettings[property] = button.dataset.value;
+          updatePlayground();
+        });
+      });
+    }
+    
+    // Setup all control groups
+    setupButtonGroup('justify-controls', 'justifyContent');
+    setupButtonGroup('align-controls', 'alignItems');
+    setupButtonGroup('direction-controls', 'flexDirection');
+    setupButtonGroup('wrap-controls', 'flexWrap');
+    
+    // Initial update
+    updatePlayground();
+  </script>
+</body>
+</html>
