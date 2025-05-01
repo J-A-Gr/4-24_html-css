@@ -233,30 +233,198 @@ h2 {
 }
 
 .diagram-wrap img {
-  background-color: #060127;
-  border-radius: 20px;
-  padding: 30px 30px; /* More padding inside the cards */
-  width: 95%; /* Slightly wider cards */
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
-  text-align: left;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 30px;
+  padding: 30px 0px; /* More padding inside the cards */
+  width: 75%; /* Slightly wider cards */
+  mix-blend-mode: screen; /* Best for light on dark! */
+  opacity: 0.7; /* Adjust for how "strong" you want the blend */
+
+  mask-image: radial-gradient(
+    circle,
+    rgba(13, 13, 43, 1) 40%,
+    /* Full color (your background) at 60% radius */ rgba(13, 13, 43, 0) 90%
+      /* Transparent fade out at the edges */
+  );
+  -webkit-mask-image: radial-gradient(
+    circle,
+    rgba(13, 13, 43, 1) 60%,
+    rgba(13, 13, 43, 0) 100%
+  );
+}
+.diagram-wrap img:hover {
+  opacity: 1; /* Brighter on hover */
+}
+
+.diagram-wrap-top img {
+  border-radius: 50px;
+  padding: 30px 30px;
+  width: 95%;
 }
 
 .diagram-wrap {
   background-color: #0d0d2b; /* or whatever your card bg color is */
   border-radius: 20px;
-  padding: 20px;
-  text-align: center;
+  align-items: center;
+  padding: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .diagram-wrap h3 {
-  font-weight: 700;
-  font-size: 1.2rem;
+  font-weight: 550;
+  font-size: 1.7rem;
   color: #fff;
-  margin-bottom: 15px;
+  margin: 15px;
+  text-align: left;
 }
 
 .mid-card {
   display: flex;
+  margin: 5%;
+  gap: 50px;
+}
+
+.bot-card {
+  display: flex;
+  margin: 5%;
+  gap: 50px;
+}
+
+.pricing {
+  padding: 100px 20px; /* More top/bottom padding for breathing space */
+  text-align: center;
+}
+
+section.pricing-section {
+  padding: 60px 20px;
+  max-width: 1200px;
+  margin: auto;
+  text-align: center;
+}
+
+.section-title .subtitle {
+  color: #f8c255;
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.section-title h2 {
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+.section-title .about-text {
+  color: #b0b3bb;
+  font-size: 1rem;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+
+/* Pricing cards layout */
+.pricing-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.pricing-card {
+  background: #1b1f27;
+  border-radius: 20px;
+  padding: 30px 20px;
+  width: 300px;
+  box-shadow: 0 0 20px rgba(255, 165, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  position: relative;
+}
+
+.pricing-card img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+.pricing-card h3 {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.pricing-card .price {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.pricing-card .price span {
+  font-size: 1rem;
+  color: #b0b3bb;
+}
+
+/* Features list */
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px 0;
+  color: #b0b3bb;
+  text-align: left;
+}
+
+.features li {
+  margin-bottom: 10px;
+}
+
+/* Buttons */
+.get-started {
+  background: #f8c255;
+  color: #000;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.get-started:hover {
+  background: #e0a835;
+}
+
+/* Most popular badge */
+.popular {
+  border: 2px solid #00f5d4;
+}
+
+.badge {
+  background-color: #00f5d4;
+  color: #000;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 10px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+/* Enterprise call-to-action */
+.enterprise-cta {
+  margin-top: 50px;
+  background: linear-gradient(to right, #1b1f27, #2c303a);
+  padding: 30px;
+  border-radius: 20px;
+}
+
+.enterprise-text {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.book-call {
+  background: #f8c255;
+  color: #000;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
 }
